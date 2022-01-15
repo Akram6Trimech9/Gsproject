@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import '@cds/core/input/register.js';
 import '@cds/core/icon/register.js';
 import { ProductServiceService } from 'src/app/Services/product-service.service';
-import { produitvendu } from 'src/app/Models/produitvendu';
+import { produitVendu } from 'src/app/Models/produitvendu';
 
 @Component({
   selector: 'app-pdf',
@@ -13,6 +13,10 @@ export class PdfComponent implements OnInit {
   val=true;
   searchb: any ; 
   products:any[]=[];
+  produitsVendus : produitVendu [] = []; 
+
+
+
   constructor(private ps:ProductServiceService) { }
 
   ngOnInit(): void {
@@ -37,31 +41,42 @@ export class PdfComponent implements OnInit {
     qte:any[]=[];
    productadd:any[]=[];
     clrtab:any[]=[];
-    exist: produitvendu[]=[];
     i=0;
-    addthis(id:string){
-      this.ps.getproductByid(id).subscribe(res=>{
-        this.exist[this.i].produit=res;
-        this.i++;
-        console.log(this.exist);
 
-     //   this.productadd.push(res) ;
-      //  this.clrtab.push(res)  
-        //console.log(this.productadd);
-        //const exist=this.cardItem.find((item:any)=>{
-       // for (let i = 0; i < this.clrtab.length; i++) {
-       //    for(let j=i+1;j<this.clrtab.length;j++){
-      //    if(this.clrtab[i].name==this.clrtab[j].name){
-             //this.clrtab[i].quantity+=1;
-              //lezem qte n'incrementi aleha lenna w magher mat3alla9 al boucle khater 9a3ed njarreb biih asba 
-       //     this.clrtab.splice(j,1);}
-          
+
+
+    
+    addToCommand(id:string){
+      if( this.produitsVendus.length > 0) {
+        let index = this.produitsVendus.findIndex(pVendu =>{ return pVendu.produit._Id == id} );
+        if(index>=0){
+          this.produitsVendus[index].quantity= this.produitsVendus[index].quantity + 1;
+        }
+
+        else {
+          const produitToAdd = this.products[this.products.findIndex(p =>{ return p._Id == id} )]
+          this.produitsVendus.push(
+            {
+              quantity:1,
+              totalHt:0.0,
+              produit:produitToAdd
+            }
+          )
+        }
         
-        });
-
-this.val=false ;
-      
+      }  
+      else {
+        const produitToAdd = this.products[this.products.findIndex(p =>{ return p._Id == id} )]
+        this.produitsVendus.push(
+          {
+            quantity:1,
+            totalHt:0.0,
+            produit:produitToAdd
+          }
+        )
+      }      
     }
+
  cardItem=[];   
    
     close(){

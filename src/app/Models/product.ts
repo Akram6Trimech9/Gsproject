@@ -1,14 +1,8 @@
-export  class product {
-       _id :string;
- name:string    ;
+export  interface produit {
+    _Id :string;
+    name:string;
+    quantity:number;
     price :number ;
-    priceTtc:number ; 
+    priceHt:number ; 
     rem: number;
-    constructor(_id:string,name:string,price:number,priceTtc:number,rem:number) {
-        this._id=_id;
-        this.name=name;
-        this.price=price ; 
-        this.priceTtc=priceTtc ; 
-        this.rem=rem
-    }
 }
